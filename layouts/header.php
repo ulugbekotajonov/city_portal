@@ -30,9 +30,14 @@
                 <div class="right-side d-flex">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
+                            <?php
+                            $query = $db->prepare("SELECT * FROM users WHERE id = :id");
+                            $query->execute([":id" => $_SESSION["user"]]);
+                            $user = $query->fetch(PDO::FETCH_ASSOC);
+                            ?>
                             <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Аккаунт    <?= $_SESSION["user"] ?? "" ?>
+                                Аккаунт
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="accountDropdown">
                                 <li><a class="dropdown-item" href="/pages/login.php">Вход</a></li>
