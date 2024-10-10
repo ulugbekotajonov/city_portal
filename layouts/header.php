@@ -31,18 +31,33 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
                             <?php
-                            $query = $db->prepare("SELECT * FROM users WHERE id = :id");
-                            $query->execute([":id" => $_SESSION["user"]]);
-                            $user = $query->fetch(PDO::FETCH_ASSOC);
+                            $user = false;
+                            if (isset($_SESSION["user"])) {
+                                $query = $db->prepare("SELECT * FROM users WHERE id = :id");
+                                $query->execute([":id" => $_SESSION["user"]]);
+                                $user = $query->fetch(PDO::FETCH_ASSOC) ?? null;
+                            }
                             ?>
                             <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Аккаунт
+                                <?= !$user ? "Аккаунт" : $user["name"] ?>
                             </a>
+                            <?php
+                            if (!$user) {
+                            ?>
                             <ul class="dropdown-menu" aria-labelledby="accountDropdown">
                                 <li><a class="dropdown-item" href="/pages/login.php">Вход</a></li>
                                 <li><a class="dropdown-item" href="/pages/register.php">Регистрация</a></li>
                             </ul>
+                            <?php
+                            } else {
+                                ?>
+                            <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                                <li><a class="dropdown-item" href="/app/actions/user/logout.php">Выйти</a></li>
+                            </ul>
+                            <?php
+                            }
+                            ?>
                         </li>
                     </ul>
                     <form class="d-flex">
