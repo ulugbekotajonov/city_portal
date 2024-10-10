@@ -44,20 +44,23 @@
                             </a>
                             <?php
                             if (!$user) {
-                            ?>
-                            <ul class="dropdown-menu" aria-labelledby="accountDropdown">
-                                <li><a class="dropdown-item" href="/pages/login.php">Вход</a></li>
-                                <li><a class="dropdown-item" href="/pages/register.php">Регистрация</a></li>
-                            </ul>
-                            <?php
+                                ?>
+                                <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                                    <li><a class="dropdown-item" href="/pages/login.php">Вход</a></li>
+                                    <li><a class="dropdown-item" href="/pages/register.php">Регистрация</a></li>
+                                </ul>
+                                <?php
                             } else {
                                 ?>
-                            <ul class="dropdown-menu" aria-labelledby="accountDropdown">
-                                <li><a class="dropdown-item" href="/app/actions/user/logout.php">Выйти</a></li>
-                            </ul>
-                            <?php
+                                <ul class="dropdown-menu" aria-labelledby="accountDropdown">
+                                    <form action="/app/actions/user/logout.php" method="post">
+                                        <button class="dropdown-item" type="submit">Выйти</button>
+                                    </form>
+                                </ul>
+                                <?php
                             }
                             ?>
+
                         </li>
                     </ul>
                     <form class="d-flex">

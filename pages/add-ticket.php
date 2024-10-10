@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!doctype html>
 <html lang="ru">
 <head>
@@ -12,18 +15,20 @@
             <h2 class="display-6 mb-3">Добавить заявку</h2>
         </div>
         <div class="row">
-            <form>
+            <form action="/app/actions/tickets/add_ticket.php" method="post" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="fullNameField" class="form-label">Тема заявки</label>
-                    <input type="text" class="form-control" id="fullNameField" aria-describedby="emailHelp">
+                    <input name="title" type="text" class="form-control" id="fullNameField"
+                           aria-describedby="emailHelp">
                 </div>
                 <div class="mb-3">
                     <label for="fullNameField" class="form-label">Изображение</label>
-                    <input type="file" class="form-control" id="fullNameField" aria-describedby="emailHelp">
+                    <input name="image" type="file" class="form-control" id="fullNameField"
+                           aria-describedby="emailHelp">
                 </div>
                 <div class="mb-3">
                     <label for="dobField" class="form-label">Описание</label>
-                    <textarea type="datetime-local" class="form-control" id="dobField"
+                    <textarea name="description" class="form-control" id="dobField"
                               aria-describedby="emailHelp"></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Добавить заявку</button>
