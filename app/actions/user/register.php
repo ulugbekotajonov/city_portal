@@ -5,7 +5,7 @@ require_once __DIR__ . "/../../../vendor/autoload.php";
 require_once __DIR__ . "/../../database/city.php";
 
 $error = false;
-$defaultUser = require_once __DIR__ . "/../../config/defaultUser.php";
+$defaultUser = require_once __DIR__ . "/../../config/defaults.php";
 
 $email = $_POST["email"];
 $name = $_POST["name"];
@@ -73,6 +73,7 @@ if ($error) {
     $_SESSION["fields"] = $fields;
     header("Location: /pages/register.php");
 }
+
 
 
 
