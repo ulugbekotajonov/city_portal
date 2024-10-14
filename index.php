@@ -16,24 +16,46 @@ session_start();
             <h2 class="display-6 mb-3">Заявки</h2>
         </div>
         <div class="row">
+            <?php
+            if (isset($_GET["q"])) {
+                $q = $db->prepare("SELECT * FROM tickets WHERE title LIKE :q ORDER BY id DESC");
+                $q->execute([
+                        ":q" => "%{$_GET["q"]}%"
+                ]);
+                $tickets = $q->fetchAll(PDO::FETCH_ASSOC);
+            } else {
+                $tickets = $db->query("SELECT * FROM tickets ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
+            }
+
+            if (empty($tickets)) {
+                ?>
+                <div class="alert alert-info" role="alert">
+                    Заявок не найдено.
+                </div>
+                <?php
+            }
+
+            $allStatus = $db->query("SELECT * FROM ticket_status")->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($tickets as $ticket) {
+                $statusId = $ticket["status_id"];
+                $status = array_filter($allStatus, function ($status) use ($statusId) {
+                    return (int)$status["id"] === (int)$statusId;
+                });
+                $status = array_pop($status);
+                ?>
             <div class="card mb-3">
-                <img src="src/static/image-2.jpg" class="card-img-top" alt="...">
+                <img src="<?= "/" . $ticket["image"] ?>" class="card-img-top" alt="...">
                 <div class="card-body">
-                    <h5 class="card-title">Отремонтировать асфальт <span
-                                class="badge bg-warning text-dark">В процессе</span></h5>
-                    <p class="card-text">Возле дороги на улице Ейдемана рядом с Политическим колледжем образовалась
-                        опасная яма.</p>
-                    <p class="card-text"><small class="text-muted">Добавлено: 24.12.2021</small></p>
+                    <h5 class="card-title"><?= $ticket["title"] ?><span
+                                class="badge bg-warning text-dark"><?= $status["label"] ?></span></h5>
+                    <p class="card-text"><?= $ticket["description"] ?></p>
+                    <p class="card-text"><small class="text-muted"><?= $ticket["created_at"] ?></small></p>
                 </div>
             </div>
-            <div class="card mb-3">
-                <img src="src/static/image-1.jpg" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Убрать мусор <span class="badge bg-success">Выполнено</span></h5>
-                    <p class="card-text">В нашем районе стали складировать много мусора, никто не убирает..</p>
-                    <p class="card-text"><small class="text-muted">Добавлено: 24.12.2021</small></p>
-                </div>
-            </div>
+            <?php
+            }
+            ?>
+
         </div>
     </div>
 </section>

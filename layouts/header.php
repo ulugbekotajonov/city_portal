@@ -12,6 +12,10 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/">Заявки</a>
                     </li>
+                    <?php
+                    $id = require __DIR__ . "/../app/config/defaults.php";
+                    if (isset($_SESSION["user"])) {
+                        ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
@@ -23,21 +27,20 @@
                                             class="badge bg-secondary">4</span></a></li>
                         </ul>
                     </li>
+                    <?php
+                    }
+                    if ($user && (int)$user["user_group_id"] === $id["adminUser"]) {
+                        ?>
                     <li class="nav-item">
                         <a href="/pages/tickets-control.php" class="nav-link">Управление заявками </a>
                     </li>
+                    <?php
+                    }
+                    ?>
                 </ul>
                 <div class="right-side d-flex">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
-                            <?php
-                            $user = false;
-                            if (isset($_SESSION["user"])) {
-                                $query = $db->prepare("SELECT * FROM users WHERE id = :id");
-                                $query->execute([":id" => $_SESSION["user"]]);
-                                $user = $query->fetch(PDO::FETCH_ASSOC) ?? null;
-                            }
-                            ?>
                             <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">
                                 <?= !$user ? "Аккаунт" : $user["name"] ?>
@@ -63,9 +66,9 @@
 
                         </li>
                     </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Поиск заявок"
-                               aria-label="Поиск заявок">
+                    <form action="/" method="get" class="d-flex">
+                        <input name="q" class="form-control me-2" type="search" placeholder="Поиск заявок"
+                               aria-label="Поиск заявок" value="<?= $_GET["q"] ?? "" ?>">
                         <button class="btn btn-outline-success" type="submit">Поиск</button>
                     </form>
                 </div>

@@ -8,3 +8,10 @@
 <?php
 require_once __DIR__ . "/../vendor/autoload.php";
 require_once __DIR__ . "/../app/database/city.php";
+
+$user = false;
+if (isset($_SESSION["user"])) {
+    $query = $db->prepare("SELECT * FROM users WHERE id = :id");
+    $query->execute([":id" => $_SESSION["user"]]);
+    $user = $query->fetch(PDO::FETCH_ASSOC) ?? null;
+}
